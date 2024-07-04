@@ -87,3 +87,31 @@ def list_all_foods():
             click.echo(f"{food}")
     else:
         click.echo("No foods found.")
+        
+def find_foods():
+    """Prompt for tag to find foods"""
+    tag = click.prompt("Enter tag to search", type=str)
+    foods = find_foods_by_tag(tag)
+    if foods:
+        for food in foods:
+            click.echo(f"{food}")
+    else:
+        click.echo("No foods found with the given tag.")
+
+def delete_food_entry():
+    """Prompt for food ID to delete"""
+    food_id = click.prompt("Enter ID of the food to delete", type=int)
+    delete_food(food_id)
+    click.echo(f"Food {food_id} deleted successfully.")
+
+def update_food_entry():
+    """Prompt for food ID and new details to update"""
+    food_id = click.prompt("Enter ID of the food to update", type=int)
+    name = click.prompt("New Food Name", type=str)
+    description = click.prompt("New Description", type=str)
+    tags = click.prompt("New Tags", type=str)
+    update_food(food_id, name, description, tags)
+    click.echo(f"Food {food_id} updated successfully.")
+
+if __name__ == "_main_":
+    cli()
