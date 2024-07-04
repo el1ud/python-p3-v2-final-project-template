@@ -69,3 +69,21 @@ def add_new_food():
     food = Food(name, description, tags, menu_id)
     add_food(food)
     click.echo("Food added successfully.")
+
+def list_all_menus():
+    """List all menus"""
+    menus = get_all_menus()
+    if menus:
+        for menu in menus:
+            click.echo(f"{menu}")
+    else:
+        click.echo("No menus found.")
+
+def list_all_foods():
+    """List all foods"""
+    foods = get_all_foods()
+    if foods:
+        for food in foods:
+            click.echo(f"{food}")
+    else:
+        click.echo("No foods found.")
