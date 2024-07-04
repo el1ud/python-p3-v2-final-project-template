@@ -51,3 +51,21 @@ def menu():
             update_food_entry()
         else:
             click.echo("Invalid choice. Please select a valid option.")
+
+def add_new_menu():
+    """Add a new menu"""
+    name = click.prompt("Menu Name", type=str)
+    menu = Menu(name)
+    add_menu(menu)
+    click.echo("Menu added successfully.")
+
+def add_new_food():
+    """Add a new food"""
+    name = click.prompt("Food Name", type=str)
+    description = click.prompt("Description", type=str)
+    tags = click.prompt("Tags", type=str)
+    menu_id = click.prompt("Menu ID", type=int)
+    
+    food = Food(name, description, tags, menu_id)
+    add_food(food)
+    click.echo("Food added successfully.")
