@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+click = "*"
 ipdb = "*"
 faker = "*"
 pytest = "7.1.3"

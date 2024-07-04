@@ -1,28 +1,12 @@
-# lib/cli.py
-
+import click
 from helpers import (
-    exit_program,
-    helper_1
+    create_tables,
+    add_menu,
+    add_food,
+    get_all_menus,
+    get_all_foods,
+    find_foods_by_tag,
+    delete_food,
+    update_food
 )
-
-
-def main():
-    while True:
-        menu()
-        choice = input("> ")
-        if choice == "0":
-            exit_program()
-        elif choice == "1":
-            helper_1()
-        else:
-            print("Invalid choice")
-
-
-def menu():
-    print("Please select an option:")
-    print("0. Exit the program")
-    print("1. Some useful function")
-
-
-if __name__ == "__main__":
-    main()
+from models import Menu, Food
