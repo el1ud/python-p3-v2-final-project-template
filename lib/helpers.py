@@ -203,4 +203,48 @@ def get_all_foods():
         print(f"An error occurred while fetching all foods: {e}")
         return []
     
-    
+def find_foods_by_tag(tag):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM foods WHERE tags LIKE ?", (f"%{tag}%",))
+            rows = cursor.fetchall()
+            if not rows:
+                print(f"No foods found with the tag '{tag}'.")
+                return []
+            return [Food.from_db_row(row) for row in rows]
+    except sqlite3.Error as e:
+        print(f"An error occurred while finding foods by tag: {e}")
+        return []
+
+def delete_food(food_id):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute("DELETE FROM foods WHERE id=?", (food_id,))
+            if cursor.rowcount == 0:
+                print(f"No food with ID {food_id} found.")
+            else:
+                conn.commit()
+                print(f"Food {food_id} deleted successfully.")
+    except sqlite3.Error as e:
+        print(f"An error occurred while deleting the food: {e}")
+
+def update_food(food_id, name, description, tags):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute("""
+                UPDATE foods
+                SET name = ?, description = ?, tags = ?
+                WHERE id = ?
+            """, (name, description, tags, food_id))
+            if cursor.rowcount == 0:
+                print(f"No food with ID {food_id} found.")
+            else:
+                conn.commit()
+                print(f"Food {food_id} updated successfully.")
+    except sqlite3.Error as e:
+        print(f"An error occurred while updating the food: {e}")
