@@ -174,3 +174,33 @@ def add_food(food):
     except sqlite3.Error as e:
         print(f"An error occurred while adding the food: {e}")
 
+
+def get_all_menus():
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM menus")
+            rows = cursor.fetchall()
+            if not rows:
+                print("No menus found.")
+                return []
+            return [Menu(*row) for row in rows]
+    except sqlite3.Error as e:
+        print(f"An error occurred while fetching all menus: {e}")
+        return []
+
+def get_all_foods():
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM foods")
+            rows = cursor.fetchall()
+            if not rows:
+                print("No foods found.")
+                return []
+            return [Food.from_db_row(row) for row in rows]
+    except sqlite3.Error as e:
+        print(f"An error occurred while fetching all foods: {e}")
+        return []
+    
+    
