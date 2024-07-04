@@ -66,3 +66,23 @@ def get_all_foods():
     except sqlite3.Error as e:
         print(f"An error occurred while fetching all foods: {e}")
         return []
+    
+def find_foods_by_tag(tag):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM foods WHERE tags LIKE ?", (f"%{tag}%",))
+            rows = cursor.fetchall()
+            return [Food.from_db_row(row) for row in rows]
+    except sqlite3.Error as e:
+        print(f"An error occurred while finding foods by tag: {e}")
+        return []
+
+def delete_food(food_id):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM foods WHERE id=?", (food_id,))
+            conn.commit()
+    except sqlite3.Error as e:
+        print(f"An error occurred while deleting the food: {e}")
