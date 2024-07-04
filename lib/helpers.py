@@ -1,28 +1,28 @@
-import sqlite3
-from models import Menu, Food
+# import sqlite3
+# from models import Menu, Food
 
-DATABASE = "menu.db"
+# DATABASE = "menu.db"
 
-def create_tables():
-    with sqlite3.connect(DATABASE) as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS menus (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL
-            )
-        """)
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS foods (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                description TEXT,
-                tags TEXT,
-                menu_id INTEGER,
-                FOREIGN KEY(menu_id) REFERENCES menus(id)
-            )
-        """)
-        conn.commit()
+# def create_tables():
+#     with sqlite3.connect(DATABASE) as conn:
+#         cursor = conn.cursor()
+#         cursor.execute("""
+#             CREATE TABLE IF NOT EXISTS menus (
+#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                 name TEXT NOT NULL
+#             )
+#         """)
+#         cursor.execute("""
+#             CREATE TABLE IF NOT EXISTS foods (
+#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                 name TEXT NOT NULL,
+#                 description TEXT,
+#                 tags TEXT,
+#                 menu_id INTEGER,
+#                 FOREIGN KEY(menu_id) REFERENCES menus(id)
+#             )
+#         """)
+#         conn.commit()
 
 def add_menu(menu):
     try:
@@ -86,3 +86,46 @@ def delete_food(food_id):
             conn.commit()
     except sqlite3.Error as e:
         print(f"An error occurred while deleting the food: {e}")
+
+def update_food(food_id, name, description, tags):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE foods
+                SET name=?, description=?, tags=?
+                WHERE id=?
+            """, (name, description, tags, food_id))
+            conn.commit()
+    except sqlite3.Error as e:
+        print(f"An error occurred while updating the food: {e}")
+
+import sqlite3
+from models import Menu, Food
+
+DATABASE = "menu.db"
+
+def create_tables():
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        # Enable foreign key support
+        cursor.execute("PRAGMA foreign_keys = ON")
+        
+        # Create tables if they don't exist
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS menus (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL
+            )
+        """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS foods (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                description TEXT,
+                tags TEXT,
+                menu_id INTEGER,
+                FOREIGN KEY(menu_id) REFERENCES menus(id)
+            )
+        """)
+        conn.commit()
